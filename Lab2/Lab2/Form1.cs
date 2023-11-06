@@ -57,10 +57,13 @@ namespace Lab2
             { "D", 0 }
         };
 
-        double x_A = 0;
-        double x_B = 0;
-        double x_C = 0;
-        double x_D = 0;
+        Dictionary<string, int> totalBatch = new Dictionary<string, int>
+        {
+            { "A", 0 },
+            { "B", 0 },
+            { "C", 0 },
+            { "D", 0 }
+        };
 
         public string Solve()
         {
@@ -100,7 +103,7 @@ namespace Lab2
                     productsWithRatios[product] = ratio;
                 }
 
-                double count = 0;
+                int count = 0;
                 string bestProduct = "";
 
                 foreach (var item in productsWithRatios.OrderByDescending(pair => pair.Value))
@@ -123,10 +126,7 @@ namespace Lab2
                         availableComponents[component] -= componentUsageForProduct * count;
                     }
 
-                    if (bestProduct == "A") x_A += count;
-                    else if (bestProduct == "B") x_B += count;
-                    else if (bestProduct == "C") x_C += count;
-                    else if (bestProduct == "D") x_D += count;
+                    totalBatch[bestProduct] += count;
                 }
 
                 if (!canProduce)
@@ -135,7 +135,13 @@ namespace Lab2
                 }
             }
 
-            string res = $"Кількість фарби A: {x_A}, Кількість фарби B: {x_B}, Кількість фарби C: {x_C}, Кількість фарби D: {x_D}";
+            string res = "";
+
+            foreach (var item in totalBatch)
+            {
+                res += $"Кількість фарби {item.Key}: { item.Value} \n";
+            }
+
             return res;
         }
     }
