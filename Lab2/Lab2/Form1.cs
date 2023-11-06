@@ -17,12 +17,14 @@ namespace Lab2
             InitializeComponent();
 
             GreedyAlgorithm greedy = new GreedyAlgorithm();
+            greedy.FillStartTable(dataGridView1);
             label1.Text = greedy.Solve();
         }
     }
 
     public class GreedyAlgorithm
     {
+        #region data
         // Задані дані
         Dictionary<string, double> availableComponents = new Dictionary<string, double>
         {
@@ -47,8 +49,9 @@ namespace Lab2
             { "Загусники", new Dictionary<string, double> { { "A", 1 }, { "B", 1.5 }, { "C", 1.3 }, { "D", 0.8 } } },
             { "Стабілізатори", new Dictionary<string, double> { { "A", 2 }, { "B", 3 }, { "C", 2.7 }, { "D", 2 } } }
         };
+        #endregion
 
-        // Ініціалізація змінних для кількості фарб
+
         Dictionary<string, int> availableNumberOfBatches = new Dictionary<string, int>
         {
             { "A", 0 },
@@ -64,6 +67,53 @@ namespace Lab2
             { "C", 0 },
             { "D", 0 }
         };
+
+        public void FillStartTable(DataGridView dataGrid)
+        {
+            dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            int columnCount = componentUsage.Count + 2;
+            dataGrid.ColumnCount = columnCount;
+
+            dataGrid.Columns[0].Name = "Вид сировини / Норми витрат сировини (л) на одну партію виробів";
+
+            for (int i = 0; i < profitPerUnit.Count; i++)
+            {
+                dataGrid.Columns[i + 1].Name = profitPerUnit.ElementAt(i).Key;
+            }
+
+            dataGrid.Columns[columnCount - 1].Name = "Загальна кількість сировини (л)";
+
+            for (int i = 0; i < availableComponents.Count; i++)
+            {
+                string[] row = new string[columnCount];
+
+                row[0] = availableComponents.ElementAt(i).Key;
+
+                Dictionary<string, double> e = componentUsage.ElementAt(i).Value;
+
+                for (int j = 0; j < e.Count; j++)
+                {
+                    row[j + 1] = e.ElementAt(j).Value.ToString();
+                }
+
+                row[columnCount - 1] = availableComponents.ElementAt(i).Value.ToString();
+
+                dataGrid.Rows.Add(row);
+            }
+
+            string[] lastRow = new string[columnCount];
+
+            lastRow[0] = "Прибуток від реалізації партії виробів одного виду (грн.)";
+
+            for (int j = 0; j < profitPerUnit.Count; j++)
+            {
+                lastRow[j + 1] = profitPerUnit.ElementAt(j).Value.ToString();
+            }
+
+            lastRow[columnCount - 1] = "";
+
+            dataGrid.Rows.Add(lastRow);
+        }
 
         public string Solve()
         {
