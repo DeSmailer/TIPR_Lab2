@@ -31,6 +31,9 @@ namespace Lab2
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.SolveButton = new System.Windows.Forms.Button();
+            this.AddProductButton = new System.Windows.Forms.Button();
+            this.addComponentButton = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -52,6 +55,9 @@ namespace Lab2
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.SolveButton);
+            this.tabPage1.Controls.Add(this.AddProductButton);
+            this.tabPage1.Controls.Add(this.addComponentButton);
             this.tabPage1.Controls.Add(this.dataGridView1);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
@@ -62,8 +68,39 @@ namespace Lab2
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // SolveButton
+            // 
+            this.SolveButton.Location = new System.Drawing.Point(849, 254);
+            this.SolveButton.Name = "SolveButton";
+            this.SolveButton.Size = new System.Drawing.Size(145, 30);
+            this.SolveButton.TabIndex = 5;
+            this.SolveButton.Text = "Розв\'язати";
+            this.SolveButton.UseVisualStyleBackColor = true;
+            this.SolveButton.Click += new System.EventHandler(this.SolveButton_Click);
+            // 
+            // AddProductButton
+            // 
+            this.AddProductButton.Location = new System.Drawing.Point(849, 218);
+            this.AddProductButton.Name = "AddProductButton";
+            this.AddProductButton.Size = new System.Drawing.Size(145, 30);
+            this.AddProductButton.TabIndex = 4;
+            this.AddProductButton.Text = "додати Виріб";
+            this.AddProductButton.UseVisualStyleBackColor = true;
+            // 
+            // addComponentButton
+            // 
+            this.addComponentButton.Location = new System.Drawing.Point(849, 168);
+            this.addComponentButton.Name = "addComponentButton";
+            this.addComponentButton.Size = new System.Drawing.Size(145, 30);
+            this.addComponentButton.TabIndex = 3;
+            this.addComponentButton.Text = "додати Компонент";
+            this.addComponentButton.UseVisualStyleBackColor = true;
+            this.addComponentButton.Click += new System.EventHandler(this.addComponentButton_Click);
+            // 
             // dataGridView1
             // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(6, 6);
             this.dataGridView1.Name = "dataGridView1";
@@ -113,6 +150,9 @@ namespace Lab2
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button AddProductButton;
+        private System.Windows.Forms.Button addComponentButton;
+        private System.Windows.Forms.Button SolveButton;
     }
 }
 

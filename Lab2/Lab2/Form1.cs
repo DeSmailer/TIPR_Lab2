@@ -12,12 +12,22 @@ namespace Lab2
 {
     public partial class Form1 : Form
     {
+        GreedyAlgorithm greedy = new GreedyAlgorithm();
+
         public Form1()
         {
             InitializeComponent();
 
-            GreedyAlgorithm greedy = new GreedyAlgorithm();
             greedy.FillStartTable(dataGridView1);
+        }
+
+        private void addComponentButton_Click(object sender, EventArgs e)
+        {
+            greedy.AddComponent(dataGridView1);
+        }
+
+        private void SolveButton_Click(object sender, EventArgs e)
+        {
             label1.Text = greedy.Solve();
         }
     }
@@ -70,8 +80,11 @@ namespace Lab2
 
         public void FillStartTable(DataGridView dataGrid)
         {
+            dataGrid.Rows.Clear();
+            dataGrid.Refresh();
+
             dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            int columnCount = componentUsage.Count + 2;
+            int columnCount = profitPerUnit.Count + 2;
             dataGrid.ColumnCount = columnCount;
 
             dataGrid.Columns[0].Name = "Вид сировини / Норми витрат сировини (л) на одну партію виробів";
@@ -113,6 +126,26 @@ namespace Lab2
             lastRow[columnCount - 1] = "";
 
             dataGrid.Rows.Add(lastRow);
+        }
+
+        public void AddComponent(DataGridView dataGrid)
+        {
+            string name = "Component" + (availableComponents.Count + 1).ToString();
+            availableComponents.Add(name, 0d);
+
+            Dictionary<string, double> newCmponentUsage = new Dictionary<string, double>();
+            foreach (var item in profitPerUnit)
+            {
+                newCmponentUsage.Add(item.Key, 0d);
+            }
+            componentUsage.Add(name, newCmponentUsage);
+
+            FillStartTable(dataGrid);
+        }
+
+        public void AddProduct()
+        {
+
         }
 
         public string Solve()
