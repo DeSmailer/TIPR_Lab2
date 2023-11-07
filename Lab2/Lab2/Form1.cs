@@ -38,7 +38,12 @@ namespace Lab2
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            greedy.Save(dataGridView1, label1);
+            greedy.Save(dataGridView1);
+        }
+
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            greedy.FillStartTable(dataGridView1);
         }
     }
 
@@ -88,14 +93,26 @@ namespace Lab2
             { "D", 0 }
         };
 
+        public void SetDataGridViewSettings(DataGridView dataGrid)
+        {
+            dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            int columnCount = profitPerUnit.Count + 2;
+            dataGrid.ColumnCount = columnCount;
+
+            foreach (DataGridViewColumn column in dataGrid.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            dataGrid.AutoGenerateColumns = true;
+        }
+
         public void FillStartTable(DataGridView dataGrid)
         {
             dataGrid.Rows.Clear();
             dataGrid.Refresh();
 
-            dataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            SetDataGridViewSettings(dataGrid);
             int columnCount = profitPerUnit.Count + 2;
-            dataGrid.ColumnCount = columnCount;
 
             dataGrid.Columns[0].Name = "Вид сировини / Норми витрат сировини (л) на одну партію виробів";
 
@@ -140,13 +157,15 @@ namespace Lab2
 
         public void AddComponent(DataGridView dataGrid)
         {
+            Save(dataGrid);
+
             string name = "Component" + (availableComponents.Count + 1).ToString();
             availableComponents.Add(name, 0d);
 
             Dictionary<string, double> newCmponentUsage = new Dictionary<string, double>();
             foreach (var item in profitPerUnit)
             {
-                newCmponentUsage.Add(item.Key, 0d);
+                newCmponentUsage.Add(item.Key, 1d);
             }
             componentUsage.Add(name, newCmponentUsage);
 
@@ -155,7 +174,10 @@ namespace Lab2
 
         public void AddProduct(DataGridView dataGrid)
         {
-            string name = "Product" + (profitPerUnit.Count + 1).ToString();
+            Save(dataGrid);
+
+            string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string name = alphabet[profitPerUnit.Count + 1].ToString();
 
             profitPerUnit.Add(name, 0d);
             availableNumberOfBatches.Add(name, 0);
@@ -164,23 +186,21 @@ namespace Lab2
             for (int i = 0; i < componentUsage.Count; i++)
             {
                 Dictionary<string, double> d = componentUsage.ElementAt(i).Value;
-                d.Add(name, 0d);
+                d.Add(name, 1d);
             }
 
             FillStartTable(dataGrid);
         }
 
-        public void Save(DataGridView dataGrid, Label console)
+        public void Save(DataGridView dataGrid)
         {
-            string str = "";
-        //первый столбик
+            //первый столбик
             Dictionary<string, double> newAvailableComponents = new Dictionary<string, double>();
             Dictionary<string, Dictionary<string, double>> newComponentUsage = new Dictionary<string, Dictionary<string, double>>();
 
             for (int i = 0; i < dataGrid.Rows.Count - 1; i++)
             {
                 double value = availableComponents.ElementAt(i).Value;
-                str += dataGrid.Rows[i].Cells[0].Value.ToString() + "\n";
                 newAvailableComponents.Add(dataGrid.Rows[i].Cells[0].Value.ToString(), value);
 
                 Dictionary<string, double> dValue = componentUsage.ElementAt(i).Value;
@@ -189,11 +209,67 @@ namespace Lab2
             availableComponents = newAvailableComponents;
             componentUsage = newComponentUsage;
 
-            console.Text = str;
+            //профит за партию
+            Dictionary<string, double> newProfitPerUnit = new Dictionary<string, double>();
+            for (int i = 0; i < profitPerUnit.Count; i++)
+            {
+                double v = Convert.ToDouble(dataGrid.Rows[dataGrid.Rows.Count - 1].Cells[i + 1].Value);
+                newProfitPerUnit.Add(dataGrid.Columns[i + 1].Name, v);
+            }
+            profitPerUnit = newProfitPerUnit;
+
+
+            //последний столбик / доступные ресурсы
+            Dictionary<string, double> newAvailableComponents2 = new Dictionary<string, double>();
+
+            for (int i = 0; i < dataGrid.Rows.Count - 1; i++)
+            {
+                double value = Convert.ToDouble(dataGrid.Rows[i].Cells[dataGrid.ColumnCount - 1].Value.ToString());
+                newAvailableComponents2.Add(availableComponents.ElementAt(i).Key, value);
+            }
+            availableComponents = newAvailableComponents2;
+
+            //средние клетки 
+            Dictionary<string, Dictionary<string, double>> newComponentUsage2 = new Dictionary<string, Dictionary<string, double>>();
+
+            for (int i = 0; i < componentUsage.Count; i++)
+            {
+                var qwe = componentUsage.ElementAt(i).Value;
+                Dictionary<string, double> v = new Dictionary<string, double>();
+
+                for (int j = 0; j < qwe.Count; j++)
+                {
+                    v.Add(qwe.ElementAt(j).Key, Convert.ToDouble(dataGrid.Rows[i].Cells[j + 1].Value.ToString()));
+                }
+
+                newComponentUsage2.Add(availableComponents.ElementAt(i).Key, v);
+            }
+            componentUsage = newComponentUsage2;
+        }
+
+        private void ResetListValue()
+        {
+            Dictionary<string, int> newTotalBatch = new Dictionary<string, int>();
+
+            foreach (var item in totalBatch)
+            {
+                newTotalBatch.Add(item.Key, 0);
+            }
+            totalBatch = newTotalBatch;
+
+            Dictionary<string, int> newAvailableNumberOfBatches = new Dictionary<string, int>();
+
+            foreach (var item in availableNumberOfBatches)
+            {
+                newAvailableNumberOfBatches.Add(item.Key, 0);
+            }
+            availableNumberOfBatches = newAvailableNumberOfBatches;
         }
 
         public string Solve()
         {
+            ResetListValue();
+
             while (true)
             {
                 bool canProduce = false;
@@ -216,11 +292,6 @@ namespace Lab2
                                 minRatio = availableAmount;
                                 availableNumberOfBatches[product] = minRatio;
                             }
-                        }
-                        else
-                        {
-                            minRatio = 0;
-                            break;
                         }
                     }
 
