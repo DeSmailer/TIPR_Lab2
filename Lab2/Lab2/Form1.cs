@@ -35,6 +35,11 @@ namespace Lab2
         {
             greedy.AddProduct(dataGridView1);
         }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            greedy.Save(dataGridView1, label1);
+        }
     }
 
     public class GreedyAlgorithm
@@ -161,8 +166,30 @@ namespace Lab2
                 Dictionary<string, double> d = componentUsage.ElementAt(i).Value;
                 d.Add(name, 0d);
             }
-            
+
             FillStartTable(dataGrid);
+        }
+
+        public void Save(DataGridView dataGrid, Label console)
+        {
+            string str = "";
+        //первый столбик
+            Dictionary<string, double> newAvailableComponents = new Dictionary<string, double>();
+            Dictionary<string, Dictionary<string, double>> newComponentUsage = new Dictionary<string, Dictionary<string, double>>();
+
+            for (int i = 0; i < dataGrid.Rows.Count - 1; i++)
+            {
+                double value = availableComponents.ElementAt(i).Value;
+                str += dataGrid.Rows[i].Cells[0].Value.ToString() + "\n";
+                newAvailableComponents.Add(dataGrid.Rows[i].Cells[0].Value.ToString(), value);
+
+                Dictionary<string, double> dValue = componentUsage.ElementAt(i).Value;
+                newComponentUsage.Add(dataGrid.Rows[i].Cells[0].Value.ToString(), dValue);
+            }
+            availableComponents = newAvailableComponents;
+            componentUsage = newComponentUsage;
+
+            console.Text = str;
         }
 
         public string Solve()

@@ -138,8 +138,9 @@ namespace Lab2
             this.SaveButton.Name = "SaveButton";
             this.SaveButton.Size = new System.Drawing.Size(145, 30);
             this.SaveButton.TabIndex = 6;
-            this.SaveButton.Text = "button1";
+            this.SaveButton.Text = "Зберегти зміни";
             this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // ResetButton
             // 
@@ -147,7 +148,7 @@ namespace Lab2
             this.ResetButton.Name = "ResetButton";
             this.ResetButton.Size = new System.Drawing.Size(145, 30);
             this.ResetButton.TabIndex = 7;
-            this.ResetButton.Text = "button2";
+            this.ResetButton.Text = "Відмінити зміни";
             this.ResetButton.UseVisualStyleBackColor = true;
             // 
             // Form1
