@@ -37,6 +37,8 @@ namespace Lab2
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.SaveButton = new System.Windows.Forms.Button();
+            this.ResetButton = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -55,6 +57,8 @@ namespace Lab2
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.ResetButton);
+            this.tabPage1.Controls.Add(this.SaveButton);
             this.tabPage1.Controls.Add(this.SolveButton);
             this.tabPage1.Controls.Add(this.AddProductButton);
             this.tabPage1.Controls.Add(this.addComponentButton);
@@ -86,10 +90,11 @@ namespace Lab2
             this.AddProductButton.TabIndex = 4;
             this.AddProductButton.Text = "додати Виріб";
             this.AddProductButton.UseVisualStyleBackColor = true;
+            this.AddProductButton.Click += new System.EventHandler(this.AddProductButton_Click);
             // 
             // addComponentButton
             // 
-            this.addComponentButton.Location = new System.Drawing.Point(849, 168);
+            this.addComponentButton.Location = new System.Drawing.Point(849, 182);
             this.addComponentButton.Name = "addComponentButton";
             this.addComponentButton.Size = new System.Drawing.Size(145, 30);
             this.addComponentButton.TabIndex = 3;
@@ -127,6 +132,24 @@ namespace Lab2
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // SaveButton
+            // 
+            this.SaveButton.Location = new System.Drawing.Point(849, 290);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(145, 30);
+            this.SaveButton.TabIndex = 6;
+            this.SaveButton.Text = "button1";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.Location = new System.Drawing.Point(849, 326);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(145, 30);
+            this.ResetButton.TabIndex = 7;
+            this.ResetButton.Text = "button2";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -153,6 +176,8 @@ namespace Lab2
         private System.Windows.Forms.Button AddProductButton;
         private System.Windows.Forms.Button addComponentButton;
         private System.Windows.Forms.Button SolveButton;
+        private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.Button SaveButton;
     }
 }
 

@@ -30,6 +30,11 @@ namespace Lab2
         {
             label1.Text = greedy.Solve();
         }
+
+        private void AddProductButton_Click(object sender, EventArgs e)
+        {
+            greedy.AddProduct(dataGridView1);
+        }
     }
 
     public class GreedyAlgorithm
@@ -143,9 +148,21 @@ namespace Lab2
             FillStartTable(dataGrid);
         }
 
-        public void AddProduct()
+        public void AddProduct(DataGridView dataGrid)
         {
+            string name = "Product" + (profitPerUnit.Count + 1).ToString();
 
+            profitPerUnit.Add(name, 0d);
+            availableNumberOfBatches.Add(name, 0);
+            totalBatch.Add(name, 0);
+
+            for (int i = 0; i < componentUsage.Count; i++)
+            {
+                Dictionary<string, double> d = componentUsage.ElementAt(i).Value;
+                d.Add(name, 0d);
+            }
+            
+            FillStartTable(dataGrid);
         }
 
         public string Solve()
