@@ -210,7 +210,7 @@ namespace Lab2
             Save(dataGrid);
 
             string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string name = alphabet[profitPerUnit.Count + 1].ToString();
+            string name = alphabet[profitPerUnit.Count].ToString();
 
             profitPerUnit.Add(name, 0d);
             availableNumberOfBatches.Add(name, 0);
