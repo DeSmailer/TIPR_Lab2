@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,10 @@ namespace Lab2
 
         private void SolveButton_Click(object sender, EventArgs e)
         {
-            label1.Text = greedy.Solve(tabPage2);
+            greedy.Save(dataGridView1);
+
+            label1.Text = greedy.Solve(tabPage2, timeLabel);
+            objectiveFunctionLabel.Text = greedy.PrintObjectiveFunction();
         }
     }
 
@@ -74,11 +78,34 @@ namespace Lab2
 
         Dictionary<string, Dictionary<string, double>> componentUsage = new Dictionary<string, Dictionary<string, double>>
         {
-            { "Пігменти", new Dictionary<string, double> { { "A", 1 }, { "B", 0 }, { "C", 0 }, { "D", 0 } } },
-            { "Розчинники", new Dictionary<string, double> { { "A", 0 }, { "B", 1 }, { "C",0 }, { "D", 0 } } },
-            { "Загусники", new Dictionary<string, double> { { "A", 0 }, { "B", 0 }, { "C",1 }, { "D", 0 } } },
-            { "Стабілізатори", new Dictionary<string, double> { { "A", 0 }, { "B", 0 }, { "C", 0 }, { "D", 1 } } }
+            { "Пігменти", new Dictionary<string, double> { { "A", 4 }, { "B", 3 }, { "C", 5 }, { "D", 3.5 } } },
+            { "Розчинники", new Dictionary<string, double> { { "A", 8 }, { "B", 9 }, { "C", 8 }, { "D", 7.5 } } },
+            { "Загусники", new Dictionary<string, double> { { "A", 1 }, { "B", 1.5 }, { "C", 1.3 }, { "D", 0.8 } } },
+            { "Стабілізатори", new Dictionary<string, double> { { "A", 2 }, { "B", 3 }, { "C", 2.7 }, { "D", 2 } } }
         };
+        //Dictionary<string, double> availableComponents = new Dictionary<string, double>
+        //{
+        //    { "Пігменти", 770 },
+        //    { "Розчинники", 1900 },
+        //    { "Загусники", 320 },
+        //    { "Стабілізатори", 730 }
+        //};
+
+        //Dictionary<string, double> profitPerUnit = new Dictionary<string, double>
+        //{
+        //    { "A", 3000 },
+        //    { "B", 3200 },
+        //    { "C", 2800 },
+        //    { "D", 3100 }
+        //};
+
+        //Dictionary<string, Dictionary<string, double>> componentUsage = new Dictionary<string, Dictionary<string, double>>
+        //{
+        //    { "Пігменти", new Dictionary<string, double> { { "A", 1 }, { "B", 0 }, { "C", 0 }, { "D", 0 } } },
+        //    { "Розчинники", new Dictionary<string, double> { { "A", 0 }, { "B", 1 }, { "C",0 }, { "D", 0 } } },
+        //    { "Загусники", new Dictionary<string, double> { { "A", 0 }, { "B", 0 }, { "C",1 }, { "D", 0 } } },
+        //    { "Стабілізатори", new Dictionary<string, double> { { "A", 0 }, { "B", 0 }, { "C", 0 }, { "D", 1 } } }
+        //};
         #endregion
 
 
@@ -171,7 +198,7 @@ namespace Lab2
             Dictionary<string, double> newCmponentUsage = new Dictionary<string, double>();
             foreach (var item in profitPerUnit)
             {
-                newCmponentUsage.Add(item.Key, 1d);
+                newCmponentUsage.Add(item.Key, 0d);
             }
             componentUsage.Add(name, newCmponentUsage);
 
@@ -192,7 +219,7 @@ namespace Lab2
             for (int i = 0; i < componentUsage.Count; i++)
             {
                 Dictionary<string, double> d = componentUsage.ElementAt(i).Value;
-                d.Add(name, 1d);
+                d.Add(name, 0d);
             }
 
             FillStartTable(dataGrid);
@@ -272,12 +299,17 @@ namespace Lab2
             availableNumberOfBatches = newAvailableNumberOfBatches;
         }
 
-        public string Solve(TabPage tabPage)
+        public string Solve(TabPage tabPage, Label timeLabel)
         {
             ResetListValue();
 
             int step = 0;
             tabPage.Controls.Clear();
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+
 
             while (true)
             {
@@ -314,11 +346,14 @@ namespace Lab2
 
                 foreach (var item in productsWithRatios.OrderByDescending(pair => pair.Value))
                 {
-                    bestProduct = item.Key;
-                    count = availableNumberOfBatches[bestProduct];
-                    if (count > 0)
+                    if (item.Value > 0)
                     {
-                        break;
+                        bestProduct = item.Key;
+                        count = availableNumberOfBatches[bestProduct];
+                        if (count > 0)
+                        {
+                            break;
+                        }
                     }
                 }
 
@@ -351,6 +386,9 @@ namespace Lab2
                 res += $"Кількість фарби {item.Key}: { item.Value} \n";
             }
 
+            stopwatch.Stop();
+            timeLabel.Text = "Час виконання = " + stopwatch.ElapsedMilliseconds.ToString() + " мс";
+
             return res;
         }
 
@@ -364,16 +402,24 @@ namespace Lab2
             int dataGridY = 6 * step + dataGridHeight * step;
 
 
-            int stepLabelWidth = 700;
-            int stepLabelHeight = 400;
+            int stepLabelWidth = 100;
+            int stepLabelHeight = 20;
             int stepLabelX = dataGridWidth + 30;
             int stepLabelY = 6 * step + dataGridHeight * step;
+
+
+            //int resLabelWidth = 100;
+            //int resLabelHeight = 40;
+            int resLabelX = dataGridWidth + 30;
+            int resLabelY = 6 * step + dataGridHeight * step + stepLabelHeight;
 
             //написи
             Label stepLabel = new Label();
             tabPage.Controls.Add(stepLabel);
-            stepLabel.Text = $"Крок {step + 1}";
             stepLabel.Location = new Point(stepLabelX, stepLabelY);
+            stepLabel.Size = new Size(stepLabelWidth, stepLabelHeight);
+
+            stepLabel.Text = $"Крок {step + 1}";
 
             //таблиці
             DataGridView grid = new DataGridView();
@@ -384,6 +430,9 @@ namespace Lab2
             grid.ColumnCount = columnCount;
             grid.Size = new Size(dataGridWidth, dataGridHeight);
             grid.Location = new Point(dataGridX, dataGridY);
+            grid.AllowUserToAddRows = false;
+            grid.MultiSelect = false;
+            grid.ReadOnly = true;
 
             foreach (DataGridViewColumn column in grid.Columns)
             {
@@ -397,7 +446,9 @@ namespace Lab2
 
             Label resLabel = new Label();
             tabPage.Controls.Add(resLabel);
-            resLabel.Location = new Point(labelX, labelY);
+            resLabel.Location = new Point(resLabelX, resLabelY);
+            resLabel.AutoSize = true;
+
 
             string res = "";
             foreach (var item in totalBatch)
@@ -406,6 +457,28 @@ namespace Lab2
             }
 
             resLabel.Text = res;
+        }
+
+        public string PrintObjectiveFunction()
+        {
+            double result = 0;
+            string function = "F = ";
+
+            for (int i = 0; i < totalBatch.Count; i++)
+            {
+                double batch = totalBatch.ElementAt(i).Value;
+                double profit = profitPerUnit.ElementAt(i).Value;
+                result += batch * profit;
+                function += $"{batch} * {profit}";
+                if (totalBatch.Count - i > 1)
+                {
+                    function += " + ";
+                }
+            }
+
+            function += $" = {result:n0}";
+
+            return function;
         }
     }
 }
