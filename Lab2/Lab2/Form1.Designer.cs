@@ -31,19 +31,17 @@ namespace Lab2
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.умова = new System.Windows.Forms.TabPage();
+            this.SolveButton = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.ResetButton = new System.Windows.Forms.Button();
             this.SaveButton = new System.Windows.Forms.Button();
             this.addComponentButton = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.AddProductButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.SolveButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.ResetButton = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.умова.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
-            this.tabPage2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -59,6 +57,8 @@ namespace Lab2
             // 
             // умова
             // 
+            this.умова.Controls.Add(this.SolveButton);
+            this.умова.Controls.Add(this.label1);
             this.умова.Controls.Add(this.ResetButton);
             this.умова.Controls.Add(this.SaveButton);
             this.умова.Controls.Add(this.addComponentButton);
@@ -71,6 +71,35 @@ namespace Lab2
             this.умова.TabIndex = 0;
             this.умова.Text = "tabPage1";
             this.умова.UseVisualStyleBackColor = true;
+            // 
+            // SolveButton
+            // 
+            this.SolveButton.Location = new System.Drawing.Point(1033, 152);
+            this.SolveButton.Name = "SolveButton";
+            this.SolveButton.Size = new System.Drawing.Size(145, 30);
+            this.SolveButton.TabIndex = 12;
+            this.SolveButton.Text = "Розв\'язати";
+            this.SolveButton.UseVisualStyleBackColor = true;
+            this.SolveButton.Click += new System.EventHandler(this.SolveButton_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1030, 256);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(46, 17);
+            this.label1.TabIndex = 11;
+            this.label1.Text = "label1";
+            // 
+            // ResetButton
+            // 
+            this.ResetButton.Location = new System.Drawing.Point(1033, 116);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(145, 30);
+            this.ResetButton.TabIndex = 9;
+            this.ResetButton.Text = "Відмінити зміни";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click_1);
             // 
             // SaveButton
             // 
@@ -104,19 +133,6 @@ namespace Lab2
             this.dataGridView1.Size = new System.Drawing.Size(1011, 859);
             this.dataGridView1.TabIndex = 2;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.button2);
-            this.tabPage2.Controls.Add(this.SolveButton);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 25);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1197, 883);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // AddProductButton
             // 
             this.AddProductButton.Location = new System.Drawing.Point(1033, 44);
@@ -127,41 +143,16 @@ namespace Lab2
             this.AddProductButton.UseVisualStyleBackColor = true;
             this.AddProductButton.Click += new System.EventHandler(this.AddProductButton_Click);
             // 
-            // label1
+            // tabPage2
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1013, 78);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 17);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
-            // 
-            // SolveButton
-            // 
-            this.SolveButton.Location = new System.Drawing.Point(980, 254);
-            this.SolveButton.Name = "SolveButton";
-            this.SolveButton.Size = new System.Drawing.Size(145, 30);
-            this.SolveButton.TabIndex = 6;
-            this.SolveButton.Text = "Розв\'язати";
-            this.SolveButton.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(526, 426);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(145, 30);
-            this.button2.TabIndex = 9;
-            this.button2.Text = "Відмінити зміни";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // ResetButton
-            // 
-            this.ResetButton.Location = new System.Drawing.Point(1033, 116);
-            this.ResetButton.Name = "ResetButton";
-            this.ResetButton.Size = new System.Drawing.Size(145, 30);
-            this.ResetButton.TabIndex = 9;
-            this.ResetButton.Text = "Відмінити зміни";
-            this.ResetButton.UseVisualStyleBackColor = true;
+            this.tabPage2.AutoScroll = true;
+            this.tabPage2.Location = new System.Drawing.Point(4, 25);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(1197, 883);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
@@ -173,9 +164,8 @@ namespace Lab2
             this.Text = "Form1";
             this.tabControl1.ResumeLayout(false);
             this.умова.ResumeLayout(false);
+            this.умова.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -189,10 +179,9 @@ namespace Lab2
         private System.Windows.Forms.Button addComponentButton;
         private System.Windows.Forms.Button SaveButton;
         private System.Windows.Forms.Button AddProductButton;
-        private System.Windows.Forms.Button SolveButton;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button ResetButton;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button SolveButton;
     }
 }
 

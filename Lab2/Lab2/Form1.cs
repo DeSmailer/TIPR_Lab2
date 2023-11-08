@@ -26,11 +26,6 @@ namespace Lab2
             greedy.AddComponent(dataGridView1);
         }
 
-        private void SolveButton_Click(object sender, EventArgs e)
-        {
-            label1.Text = greedy.Solve();
-        }
-
         private void AddProductButton_Click(object sender, EventArgs e)
         {
             greedy.AddProduct(dataGridView1);
@@ -44,6 +39,16 @@ namespace Lab2
         private void ResetButton_Click(object sender, EventArgs e)
         {
             greedy.FillStartTable(dataGridView1);
+        }
+
+        private void ResetButton_Click_1(object sender, EventArgs e)
+        {
+            greedy.FillStartTable(dataGridView1);
+        }
+
+        private void SolveButton_Click(object sender, EventArgs e)
+        {
+            label1.Text = greedy.Solve(tabPage2);
         }
     }
 
@@ -69,10 +74,10 @@ namespace Lab2
 
         Dictionary<string, Dictionary<string, double>> componentUsage = new Dictionary<string, Dictionary<string, double>>
         {
-            { "Пігменти", new Dictionary<string, double> { { "A", 4 }, { "B", 3 }, { "C", 5 }, { "D", 3.5 } } },
-            { "Розчинники", new Dictionary<string, double> { { "A", 8 }, { "B", 9 }, { "C", 8 }, { "D", 7.5 } } },
-            { "Загусники", new Dictionary<string, double> { { "A", 1 }, { "B", 1.5 }, { "C", 1.3 }, { "D", 0.8 } } },
-            { "Стабілізатори", new Dictionary<string, double> { { "A", 2 }, { "B", 3 }, { "C", 2.7 }, { "D", 2 } } }
+            { "Пігменти", new Dictionary<string, double> { { "A", 1 }, { "B", 0 }, { "C", 0 }, { "D", 0 } } },
+            { "Розчинники", new Dictionary<string, double> { { "A", 0 }, { "B", 1 }, { "C",0 }, { "D", 0 } } },
+            { "Загусники", new Dictionary<string, double> { { "A", 0 }, { "B", 0 }, { "C",1 }, { "D", 0 } } },
+            { "Стабілізатори", new Dictionary<string, double> { { "A", 0 }, { "B", 0 }, { "C", 0 }, { "D", 1 } } }
         };
         #endregion
 
@@ -137,6 +142,7 @@ namespace Lab2
                 }
 
                 row[columnCount - 1] = availableComponents.ElementAt(i).Value.ToString();
+
 
                 dataGrid.Rows.Add(row);
             }
@@ -266,15 +272,17 @@ namespace Lab2
             availableNumberOfBatches = newAvailableNumberOfBatches;
         }
 
-        public string Solve()
+        public string Solve(TabPage tabPage)
         {
             ResetListValue();
+
+            int step = 0;
+            tabPage.Controls.Clear();
 
             while (true)
             {
                 bool canProduce = false;
                 var productsWithRatios = new Dictionary<string, double>();
-
                 foreach (var product in profitPerUnit.Keys)
                 {
                     int minRatio = int.MaxValue;
@@ -331,16 +339,73 @@ namespace Lab2
                 {
                     break;
                 }
+
+                CreateStepFromDataGrid(tabPage, step);
+
+                step++;
             }
 
             string res = "";
-
             foreach (var item in totalBatch)
             {
                 res += $"Кількість фарби {item.Key}: { item.Value} \n";
             }
 
             return res;
+        }
+
+        public void CreateStepFromDataGrid(TabPage tabPage, int step)
+        {
+            //дані
+            int dataGridWidth = 700;
+            int dataGridHeight = 400;
+
+            int dataGridX = 6;
+            int dataGridY = 6 * step + dataGridHeight * step;
+
+
+            int stepLabelWidth = 700;
+            int stepLabelHeight = 400;
+            int stepLabelX = dataGridWidth + 30;
+            int stepLabelY = 6 * step + dataGridHeight * step;
+
+            //написи
+            Label stepLabel = new Label();
+            tabPage.Controls.Add(stepLabel);
+            stepLabel.Text = $"Крок {step + 1}";
+            stepLabel.Location = new Point(stepLabelX, stepLabelY);
+
+            //таблиці
+            DataGridView grid = new DataGridView();
+            tabPage.Controls.Add(grid);
+
+            grid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            int columnCount = profitPerUnit.Count + 2;
+            grid.ColumnCount = columnCount;
+            grid.Size = new Size(dataGridWidth, dataGridHeight);
+            grid.Location = new Point(dataGridX, dataGridY);
+
+            foreach (DataGridViewColumn column in grid.Columns)
+            {
+                column.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
+            grid.AutoGenerateColumns = true;
+
+            FillStartTable(grid);
+
+            //результати
+
+            Label resLabel = new Label();
+            tabPage.Controls.Add(resLabel);
+            resLabel.Location = new Point(labelX, labelY);
+
+            string res = "";
+            foreach (var item in totalBatch)
+            {
+                res += $"Кількість фарби {item.Key}: { item.Value} \n";
+            }
+
+            resLabel.Text = res;
         }
     }
 }
